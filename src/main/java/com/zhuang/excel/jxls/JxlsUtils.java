@@ -24,15 +24,13 @@ public class JxlsUtils {
             }
         }
         JxlsHelper jxlsHelper = JxlsHelper.getInstance();
-        jxlsHelper.setUseFastFormulaProcessor(false);
         jxlsHelper.setEvaluateFormulas(true);
-
         Transformer transformer = jxlsHelper.createTransformer(inputStream, outputStream);
         JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();
         Map<String, Object> functionMap = new HashMap<>();
         functionMap.put("utils", new JxlsUtils());
-        JexlEngine customJexlEngine = new JexlBuilder().namespaces(functionMap).create();
-        evaluator.setJexlEngine(customJexlEngine);
+        JexlEngine jexlEngine = new JexlBuilder().namespaces(functionMap).create();
+        evaluator.setJexlEngine(jexlEngine);
 
         jxlsHelper.processTemplate(context, transformer);
     }
