@@ -50,8 +50,8 @@ public class JxlsUtils {
             return "";
         }
         try {
-            SimpleDateFormat dateFmt = new SimpleDateFormat(format);
-            return dateFmt.format(date);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            return simpleDateFormat.format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
