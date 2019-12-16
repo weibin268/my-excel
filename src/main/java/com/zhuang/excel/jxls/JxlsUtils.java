@@ -24,18 +24,16 @@ public class JxlsUtils {
             }
         }
         JxlsHelper jxlsHelper = JxlsHelper.getInstance();
-        Transformer transformer = TransformerFactory.createTransformer(inputStream, outputStream);
-        //获得配置
+        jxlsHelper.setUseFastFormulaProcessor(false);
+        jxlsHelper.setEvaluateFormulas(true);
+
+        Transformer transformer = jxlsHelper.createTransformer(inputStream, outputStream);
         JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();
-        //设置静默模式，不报警告
-        //evaluator.getJexlEngine().setSilent(true);
-        //函数强制，自定义功能
         Map<String, Object> functionMap = new HashMap<>();
         functionMap.put("utils", new JxlsUtils());
         JexlEngine customJexlEngine = new JexlBuilder().namespaces(functionMap).create();
         evaluator.setJexlEngine(customJexlEngine);
-        //必须要这个，否者表格函数统计会错乱
-        jxlsHelper.setUseFastFormulaProcessor(false);
+
         jxlsHelper.processTemplate(context, transformer);
     }
 
