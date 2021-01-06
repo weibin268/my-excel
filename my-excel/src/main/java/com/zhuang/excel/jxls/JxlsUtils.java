@@ -24,6 +24,7 @@ public class JxlsUtils {
             }
         }
         JxlsHelper jxlsHelper = JxlsHelper.getInstance();
+        //重新计算公式
         jxlsHelper.setEvaluateFormulas(true);
         Transformer transformer = jxlsHelper.createTransformer(inputStream, outputStream);
         JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();
