@@ -56,7 +56,10 @@ public class EasyExcelUtilsTest {
         user.setDate(new Date());
         userList.add(user);
         EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(), "D:\\temp\\easyexcel-test-01.xlsx",
-                new FillItemBuilder().add("userList", userList).buildList());
+                new FillItemBuilder()
+                        .add("userList", userList)
+                        .set("total", userList.size())
+                        .buildList());
 
     }
 }
