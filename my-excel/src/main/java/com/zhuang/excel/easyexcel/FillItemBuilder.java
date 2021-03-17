@@ -7,18 +7,14 @@ public class FillItemBuilder {
     private List<FillItem> fillItemList = new ArrayList<>();
     private Map<String, Object> map = new HashMap<String, Object>();
 
-    public FillItemBuilder add(Object data) {
-        fillItemList.add(new FillItem(null, data));
-        return this;
-    }
 
-    public FillItemBuilder add(String name, Collection data) {
+    public FillItemBuilder add(String name, Object data) {
         fillItemList.add(new FillItem(name, data));
         return this;
     }
 
-    public FillItemBuilder add4Horizontal(String name, Collection collection) {
-        fillItemList.add(new HorizontalFillItem(name, collection));
+    public FillItemBuilder add4Horizontal(String name, Object data) {
+        fillItemList.add(new HorizontalFillItem(name, data));
         return this;
     }
 
@@ -29,7 +25,7 @@ public class FillItemBuilder {
 
     List<FillItem> buildList() {
         if (map.size() > 0) {
-            add(map);
+            add(null, map);
         }
         return fillItemList;
     }
