@@ -55,8 +55,8 @@ public class EasyExcelUtilsTest {
         user.setAge(20);
         user.setDate(new Date());
         userList.add(user);
-        FillItem fillItem = new FillItem("userList", userList);
-        EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(), "D:\\temp\\easyexcel-test-01.xlsx", Arrays.asList(fillItem));
+        EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(), "D:\\temp\\easyexcel-test-01.xlsx",
+                new FillItemBuilder().add("userList", userList).buildList());
 
     }
 }
