@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class EasyExcelUtilsTest {
 
 
-    public static class User{
+    public static class User {
         private String name;
         private Integer age;
         private Date date;
@@ -42,7 +42,6 @@ public class EasyExcelUtilsTest {
         }
     }
 
-
     @Test
     public void export() {
         List<User> userList = new ArrayList<>();
@@ -57,7 +56,7 @@ public class EasyExcelUtilsTest {
         user.setDate(new Date());
         userList.add(user);
         FillItem fillItem = new FillItem("userList", userList);
-        EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(),"D:\\temp\\easyexcel-test-01.xlsx", Arrays.asList(fillItem));
+        EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(), "D:\\temp\\easyexcel-test-01.xlsx", Arrays.asList(fillItem));
 
     }
 }

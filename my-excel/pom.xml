@@ -77,17 +77,18 @@
             <artifactId>jxls</artifactId>
             <version>2.8.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.jxls</groupId>
-            <artifactId>jxls-poi</artifactId>
-            <version>2.8.1</version>
-        </dependency>
-        <!--jxls-poi(poi版本:3.17)-->
+        <!--jxls-poi(poi版本:4.1.0)-->
         <!--<dependency>
             <groupId>org.jxls</groupId>
             <artifactId>jxls-poi</artifactId>
-            <version>1.0.15</version>
+            <version>2.8.1</version>
         </dependency>-->
+        <!--jxls-poi(poi版本:3.17)-->
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls-poi</artifactId>
+            <version>1.0.15</version>
+        </dependency>
         <!--end jxls-->
 
         <!--easyexcel-->
