@@ -1,16 +1,10 @@
-package com.zhuang.excel.easyexcel;
+package com.zhuang.excel.easypoi;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.Assert.*;
-
-public class EasyExcelUtilsTest {
-
+public class EasyPoiUtilsTest {
 
     public static class User {
         private String name;
@@ -44,22 +38,20 @@ public class EasyExcelUtilsTest {
 
     @Test
     public void export() {
-        List<User> userList = new ArrayList<>();
-        User user = new User();
+        Map<String, Object> model = new HashMap<>();
+        List<EasyPoiUtilsTest.User> userList = new ArrayList<>();
+        EasyPoiUtilsTest.User user = new EasyPoiUtilsTest.User();
         user.setName("zwb");
         user.setAge(10);
         user.setDate(new Date());
         userList.add(user);
-        user = new User();
+        user = new EasyPoiUtilsTest.User();
         user.setName("zzz");
         user.setAge(20);
         user.setDate(new Date());
         userList.add(user);
-        EasyExcelUtils.export(getClass().getResource("/excel/easyexcel-test-01.xlsx").getPath(), "D:\\temp\\easyexcel-test-01.xlsx",
-                new FillItemBuilder()
-                        .add("userList", userList)
-                        .set("total", userList.size())
-                        .buildList());
-
+        model.put("userList", userList);
+        model.put("total", 100);
+        EasyPoiUtils.export(getClass().getResource("/excel/easypoi-test-01.xlsx").getPath(), "D:\\temp\\easypoi-test-01.xlsx", model);
     }
 }

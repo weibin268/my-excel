@@ -3,7 +3,6 @@ package com.zhuang.excel.controller;
 import com.zhuang.excel.jxls.JxlsUtils;
 import com.zhuang.excel.model.User;
 import com.zhuang.excel.util.ExcelUtils;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
