@@ -23,7 +23,7 @@ public class FillItemBuilder {
         return this;
     }
 
-    List<FillItem> buildList() {
+    public List<FillItem> buildList() {
         if (map.size() > 0) {
             add(null, map);
         }
