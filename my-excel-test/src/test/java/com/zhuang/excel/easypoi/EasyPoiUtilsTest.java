@@ -1,39 +1,17 @@
 package com.zhuang.excel.easypoi;
 
+import lombok.Data;
 import org.junit.Test;
 
 import java.util.*;
 
 public class EasyPoiUtilsTest {
 
+    @Data
     public static class User {
         private String name;
         private Integer age;
         private Date date;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getAge() {
-            return age;
-        }
-
-        public void setAge(Integer age) {
-            this.age = age;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
     }
 
     @Test
@@ -54,4 +32,6 @@ public class EasyPoiUtilsTest {
         model.put("total", 100);
         EasyPoiUtils.export(getClass().getResource("/excel/easypoi-test-01.xlsx").getPath(), "D:\\temp\\easypoi-test-01.xlsx", model);
     }
+
+
 }

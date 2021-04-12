@@ -1,47 +1,21 @@
 package com.zhuang.excel.easyexcel;
 
-import com.zhuang.excel.easyexcel.EasyExcelUtils;
-import com.zhuang.excel.easyexcel.FillItemBuilder;
+import com.zhuang.excel.demo.UserModel;
+import com.zhuang.excel.easypoi.EasyPoiUtils;
+import lombok.Data;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class EasyExcelUtilsTest {
 
-
+    @Data
     public static class User {
         private String name;
         private Integer age;
         private Date date;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getAge() {
-            return age;
-        }
-
-        public void setAge(Integer age) {
-            this.age = age;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
     }
 
     @Test
@@ -63,5 +37,11 @@ public class EasyExcelUtilsTest {
                         .set("total", userList.size())
                         .buildList());
 
+    }
+
+    @Test
+    public void readToList() {
+        List<UserModel> userList = EasyExcelUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), UserModel.class);
+        userList.forEach(System.out::println);
     }
 }

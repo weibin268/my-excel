@@ -1,6 +1,7 @@
 package com.zhuang.excel.jxls;
 
 import com.zhuang.excel.jxls.JxlsUtils;
+import lombok.Data;
 import org.junit.Test;
 
 import java.util.*;
@@ -9,34 +10,11 @@ import static org.junit.Assert.*;
 
 public class JxlsUtilsTest {
 
+    @Data
     public static class User{
         private String name;
         private Integer age;
         private Date date;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getAge() {
-            return age;
-        }
-
-        public void setAge(Integer age) {
-            this.age = age;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
     }
 
 

@@ -2,16 +2,11 @@ package com.zhuang.excel.easypoi;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillWrapper;
-import com.zhuang.excel.easyexcel.FillItem;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.io.*;
-import java.util.Collection;
-import java.util.List;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 public class EasyPoiUtils {
@@ -34,4 +29,6 @@ public class EasyPoiUtils {
             throw new RuntimeException(e);
         }
     }
+
+
 }
