@@ -29,13 +29,14 @@ public class EasyPoiUtils {
         try {
             OutputStream outputStream = new FileOutputStream(outputFilePath);
             export(inputFilePath, outputStream, model);
+            outputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public static <T> void export(OutputStream outputStream, Collection<T> dataSet, Class<T> pojoClass) {
-        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(null,null, ExcelType.XSSF), pojoClass, dataSet);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(null, null, ExcelType.XSSF), pojoClass, dataSet);
         try {
             workbook.write(outputStream);
         } catch (IOException e) {
@@ -48,7 +49,8 @@ public class EasyPoiUtils {
         try {
             outputStream = new FileOutputStream(outputFilePath);
             export(outputStream, dataSet, pojoClass);
-        } catch (FileNotFoundException e) {
+            outputStream.close();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

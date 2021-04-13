@@ -41,6 +41,8 @@ public class JxlsUtils {
             InputStream inputStream = new FileInputStream(inputFilePath);
             OutputStream outputStream = new FileOutputStream(outputFilePath);
             export(inputStream, outputStream, model);
+            outputStream.close();
+            inputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

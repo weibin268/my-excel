@@ -32,6 +32,8 @@ public class EasyExcelUtils {
             InputStream inputStream = new FileInputStream(inputFilePath);
             OutputStream outputStream = new FileOutputStream(outputFilePath);
             export(inputStream, outputStream, fillItemList);
+            outputStream.close();
+            inputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,7 +48,8 @@ public class EasyExcelUtils {
         try {
             outputStream = new FileOutputStream(outputFilePath);
             EasyExcel.write(outputStream, head).sheet().doWrite(data);
-        } catch (FileNotFoundException e) {
+            outputStream.close();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
