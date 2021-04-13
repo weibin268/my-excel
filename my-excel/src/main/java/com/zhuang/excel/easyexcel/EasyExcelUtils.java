@@ -37,7 +37,21 @@ public class EasyExcelUtils {
         }
     }
 
-    public static  <T> List<T> readToList(String inputFilePath, Class head) {
+    public static <T> void export(OutputStream outputStream, List<T> data, Class<T> head) {
+        EasyExcel.write(outputStream, head).sheet().doWrite(data);
+    }
+
+    public static <T> void export(String outputFilePath, List<T> data, Class<T> head) {
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(outputFilePath);
+            EasyExcel.write(outputStream, head).sheet().doWrite(data);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> List<T> readToList(String inputFilePath, Class head) {
         try {
             InputStream inputStream = new FileInputStream(inputFilePath);
             return readToList(inputStream, head);
@@ -46,7 +60,7 @@ public class EasyExcelUtils {
         }
     }
 
-    public static  <T> List<T> readToList(InputStream inputStream, Class head) {
+    public static <T> List<T> readToList(InputStream inputStream, Class head) {
         List<T> result = new ArrayList<>();
         EasyExcel.read(inputStream, head, new AnalysisEventListener<T>() {
             @Override

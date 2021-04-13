@@ -40,6 +40,22 @@ public class EasyExcelUtilsTest {
     }
 
     @Test
+    public void export2() {
+        List<UserModel> userList = new ArrayList<>();
+        UserModel user = new UserModel();
+        user.setName("zwb");
+        user.setAge(10);
+        user.setDate(new Date());
+        userList.add(user);
+        user = new UserModel();
+        user.setName("zzz");
+        user.setAge(20);
+        user.setDate(new Date());
+        userList.add(user);
+        EasyExcelUtils.export("D:\\temp\\easyexcel-test-02.xlsx", userList, UserModel.class);
+    }
+
+    @Test
     public void readToList() {
         List<UserModel> userList = EasyExcelUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), UserModel.class);
         userList.forEach(System.out::println);
