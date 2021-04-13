@@ -1,7 +1,6 @@
 package com.zhuang.excel.easyexcel;
 
-import com.zhuang.excel.demo.UserModel;
-import com.zhuang.excel.easypoi.EasyPoiUtils;
+import com.zhuang.excel.demo.User4EasyExcel;
 import lombok.Data;
 import org.junit.Test;
 
@@ -41,23 +40,23 @@ public class EasyExcelUtilsTest {
 
     @Test
     public void export2() {
-        List<UserModel> userList = new ArrayList<>();
-        UserModel user = new UserModel();
+        List<User4EasyExcel> userList = new ArrayList<>();
+        User4EasyExcel user = new User4EasyExcel();
         user.setName("zwb");
         user.setAge(10);
         user.setDate(new Date());
         userList.add(user);
-        user = new UserModel();
+        user = new User4EasyExcel();
         user.setName("zzz");
         user.setAge(20);
         user.setDate(new Date());
         userList.add(user);
-        EasyExcelUtils.export("D:\\temp\\easyexcel-test-02.xlsx", userList, UserModel.class);
+        EasyExcelUtils.export("D:\\temp\\easyexcel-test-02.xlsx", userList, User4EasyExcel.class);
     }
 
     @Test
     public void readToList() {
-        List<UserModel> userList = EasyExcelUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), UserModel.class);
+        List<User4EasyExcel> userList = EasyExcelUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), User4EasyExcel.class);
         userList.forEach(System.out::println);
     }
 }

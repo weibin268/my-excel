@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserModel {
+public class User4EasyExcel {
 
     @ExcelProperty("姓名")
     private String name;
