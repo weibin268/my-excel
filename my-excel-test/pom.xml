@@ -35,6 +35,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.weibin268</groupId>
             <artifactId>my-excel</artifactId>
             <version>1.0.0-SNAPSHOT</version>
