@@ -57,8 +57,10 @@ public class EasyExcelUtils {
     public static <T> List<T> readToList(String inputFilePath, Class head) {
         try {
             InputStream inputStream = new FileInputStream(inputFilePath);
-            return readToList(inputStream, head);
-        } catch (FileNotFoundException e) {
+            List<T> result = readToList(inputStream, head);
+            inputStream.close();
+            return result;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
