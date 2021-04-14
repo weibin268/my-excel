@@ -1,6 +1,5 @@
 package com.zhuang.excel.controller;
 
-import com.zhuang.excel.jxls.JxlsUtils;
 import com.zhuang.excel.model.User;
 import com.zhuang.excel.util.ExcelUtils;
 import org.springframework.stereotype.Controller;
@@ -8,13 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Controller
@@ -44,7 +39,7 @@ public class ExcelController {
         user.setDate(new Date());
         userList.add(user);
         model.put("list", userList);
-        ExcelUtils.export(templateFilePath, fileName, model, response);
+        ExcelUtils.export4Jxls(templateFilePath, fileName, model, response);
     }
 
 }

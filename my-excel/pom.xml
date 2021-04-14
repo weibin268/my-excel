@@ -77,6 +77,12 @@
             <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.29</version>
+            <scope>provided</scope>
+        </dependency>
         <!--begin jxls-->
         <dependency>
             <groupId>org.jxls</groupId>
