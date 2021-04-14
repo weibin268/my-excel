@@ -26,7 +26,7 @@ public class ExcelController {
     }
 
     @RequestMapping(value = "export4EasyExcel")
-    public void export4EasyExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void export4EasyExcel(HttpServletRequest request, HttpServletResponse response) {
         List<User> userList = new ArrayList<>();
         User user = new User();
         user.setName("zwb");
