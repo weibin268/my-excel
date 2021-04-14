@@ -40,6 +40,9 @@ public class ExcelUtils {
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
+        if (templateFilePath.startsWith("/")) {
+            templateFilePath = templateFilePath.substring(1);
+        }
         OutputStream outputStream = getOutputStream(fileName, response);
         EasyPoiUtils.export(templateFilePath, outputStream, data);
         try {
