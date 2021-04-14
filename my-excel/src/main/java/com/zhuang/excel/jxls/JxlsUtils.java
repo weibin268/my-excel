@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class JxlsUtils {
 
-    public static void export(InputStream inputStream, OutputStream outputStream, Map<String, Object> model) throws IOException {
+    public static void export(InputStream inputStream, OutputStream outputStream, Map<String, Object> model) {
         Context context = new Context();
         if (model != null) {
             for (String key : model.keySet()) {
@@ -32,8 +32,11 @@ public class JxlsUtils {
         functionMap.put("utils", new JxlsUtils());
         JexlEngine jexlEngine = new JexlBuilder().namespaces(functionMap).create();
         evaluator.setJexlEngine(jexlEngine);
-
-        jxlsHelper.processTemplate(context, transformer);
+        try {
+            jxlsHelper.processTemplate(context, transformer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void export(String inputFilePath, String outputFilePath, Map<String, Object> model) {
