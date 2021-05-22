@@ -70,6 +70,20 @@ public class ExcelUtils {
         }
     }
 
+    public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName) {
+        export4EasyPoi(dataSet, head, fileName, getResponse());
+    }
+
+    public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName, HttpServletResponse response) {
+        OutputStream outputStream = getOutputStream(fileName, response);
+        EasyPoiUtils.export(outputStream, dataSet, head);
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data) {
         export4Jxls(templateFilePath, fileName, data);
     }

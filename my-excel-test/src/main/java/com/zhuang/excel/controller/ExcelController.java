@@ -79,6 +79,24 @@ public class ExcelController {
         ExcelUtils.export4EasyPoi("/excel/easypoi-test-01.xlsx", "easypoi-test-01.xlsx", model);
     }
 
+    @RequestMapping(value = "export4EasyPoi2")
+    public void export4EasyPoi2() {
+        Map<String, Object> model = new HashMap<>();
+        List<User4EasyPoi> userList = new ArrayList<>();
+        User4EasyPoi user = new User4EasyPoi();
+        user.setName("zwb");
+        user.setAge(10);
+        user.setDate(new Date());
+        userList.add(user);
+        user = new User4EasyPoi();
+        user.setName("zzz");
+        user.setAge(20);
+        user.setDate(new Date());
+        userList.add(user);
+        model.put("list", userList);
+        ExcelUtils.export4EasyPoi(userList, User4EasyPoi.class, "easypoi-test-02.xlsx");
+    }
+
     @RequestMapping(value = "export4Jxls")
     public void export4Jxls() {
         Map<String, Object> model = new HashMap<>();
