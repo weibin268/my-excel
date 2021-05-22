@@ -54,7 +54,7 @@ public class ExcelUtils {
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data) {
-        export4EasyPoi(templateFilePath, fileName, data);
+        export4EasyPoi(templateFilePath, fileName, data, getResponse());
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
@@ -85,7 +85,7 @@ public class ExcelUtils {
     }
 
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data) {
-        export4Jxls(templateFilePath, fileName, data);
+        export4Jxls(templateFilePath, fileName, data, getResponse());
     }
 
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
