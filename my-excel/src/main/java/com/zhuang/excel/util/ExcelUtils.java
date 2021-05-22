@@ -108,6 +108,7 @@ public class ExcelUtils {
             for (MultipartFile file : entry.getValue()) {
                 try {
                     result = file.getInputStream();
+                    break;
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
