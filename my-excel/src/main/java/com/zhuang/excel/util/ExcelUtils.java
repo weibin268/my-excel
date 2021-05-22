@@ -86,19 +86,34 @@ public class ExcelUtils {
         }
     }
 
-    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer) {
-        import4EasyExcel(head, consumer, getRequest());
+    public static <T> List<T> import4EasyExcel(Class<T> head) {
+        return import4EasyExcel(head, getRequest());
     }
 
-    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer, HttpServletRequest request) {
+    public static <T> List<T> import4EasyExcel(Class<T> head, HttpServletRequest request) {
         InputStream inputStream = getInputStream(request);
         List<T> dataList = EasyExcelUtils.readToList(inputStream, head);
-        consumer.accept(dataList);
+        return dataList;
     }
 
     private static InputStream getInputStream(String templateFilePath) {
         InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
         return inputStream;
+    }
+
+    private static InputStream getInputStream(HttpServletRequest request) {
+        InputStream result = null;
+        StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
+        for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
+            for (MultipartFile file : entry.getValue()) {
+                try {
+                    result = file.getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return result;
     }
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
@@ -145,21 +160,6 @@ public class ExcelUtils {
             result = new String(fileName.getBytes("utf-8"), "ISO8859-1");//chrome,firefox
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-    private static InputStream getInputStream(HttpServletRequest request) {
-        InputStream result = null;
-        StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
-        for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
-            for (MultipartFile file : entry.getValue()) {
-                try {
-                    result = file.getInputStream();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
         return result;
     }

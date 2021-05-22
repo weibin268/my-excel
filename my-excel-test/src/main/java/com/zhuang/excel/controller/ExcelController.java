@@ -99,6 +99,7 @@ public class ExcelController {
     @RequestMapping(value = "import4EasyExcel")
     @ResponseBody
     public void import4EasyExcel() {
-        ExcelUtils.import4EasyExcel(User4EasyExcel.class, dataList -> dataList.forEach(System.out::println));
+        List<User4EasyExcel> dataList = ExcelUtils.import4EasyExcel(User4EasyExcel.class);
+        dataList.forEach(System.out::println);
     }
 }
