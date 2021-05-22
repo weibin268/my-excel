@@ -151,10 +151,7 @@ public class ExcelUtils {
 
     private static InputStream getInputStream(HttpServletRequest request) {
         InputStream result = null;
-        if (!(request instanceof StandardMultipartHttpServletRequest)) {
-            throw new RuntimeException("request is not instance of StandardMultipartHttpServletRequest!");
-        }
-        StandardMultipartHttpServletRequest multipartRequest = (StandardMultipartHttpServletRequest) request;
+        StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
         for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
             for (MultipartFile file : entry.getValue()) {
                 try {
