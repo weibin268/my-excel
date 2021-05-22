@@ -34,7 +34,6 @@ public class EasyPoiUtilsTest {
         EasyPoiUtils.export(getClass().getResource("/excel/easypoi-test-01.xlsx").getPath(), "D:\\temp\\easypoi-test-01.xlsx", model);
     }
 
-
     @Test
     public void export2() {
         List<User4EasyPoi> userList = new ArrayList<>();
@@ -49,6 +48,12 @@ public class EasyPoiUtilsTest {
         user.setDate(new Date());
         userList.add(user);
         EasyPoiUtils.export("D:\\temp\\easypoi-test-02.xlsx", userList, User4EasyPoi.class);
+    }
+
+    @Test
+    public void readToList() {
+        List<User4EasyPoi> userList = EasyPoiUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), User4EasyPoi.class);
+        userList.forEach(System.out::println);
     }
 
 }

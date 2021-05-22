@@ -1,16 +1,18 @@
 package com.zhuang.excel.easypoi;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.afterturn.easypoi.util.PoiPublicUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class EasyPoiUtils {
@@ -53,5 +55,27 @@ public class EasyPoiUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> List<T> readToList(String inputFilePath, Class pojoClass) {
+        try {
+            InputStream inputStream = new FileInputStream(inputFilePath);
+            List<T> result = readToList(inputStream, pojoClass);
+            inputStream.close();
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> List<T> readToList(InputStream inputStream, Class pojoClass) {
+        List<T> result;
+        ImportParams importParams = new ImportParams();
+        try {
+            result = ExcelImportUtil.importExcel(inputStream, pojoClass, importParams);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

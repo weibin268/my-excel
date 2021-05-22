@@ -1,6 +1,7 @@
 package com.zhuang.excel.controller;
 
 import com.zhuang.excel.demo.User4EasyExcel;
+import com.zhuang.excel.demo.User4EasyPoi;
 import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.FillItemBuilder;
 import com.zhuang.excel.model.User;
@@ -100,6 +101,13 @@ public class ExcelController {
     @ResponseBody
     public void import4EasyExcel() {
         List<User4EasyExcel> dataList = ExcelUtils.import4EasyExcel(User4EasyExcel.class);
+        dataList.forEach(System.out::println);
+    }
+
+    @RequestMapping(value = "import4EasyPoi")
+    @ResponseBody
+    public void import4EasyPoi() {
+        List<User4EasyPoi> dataList = ExcelUtils.import4EasyPoi(User4EasyPoi.class);
         dataList.forEach(System.out::println);
     }
 }

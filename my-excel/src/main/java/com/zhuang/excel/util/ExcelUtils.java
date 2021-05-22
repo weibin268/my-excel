@@ -96,6 +96,16 @@ public class ExcelUtils {
         return dataList;
     }
 
+    public static <T> List<T> import4EasyPoi(Class<T> pojoClass) {
+        return import4EasyPoi(pojoClass, getRequest());
+    }
+
+    public static <T> List<T> import4EasyPoi(Class<T> pojoClass, HttpServletRequest request) {
+        InputStream inputStream = getInputStream(request);
+        List<T> dataList = EasyPoiUtils.readToList(inputStream, pojoClass);
+        return dataList;
+    }
+
     private static InputStream getInputStream(String templateFilePath) {
         InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
         return inputStream;
