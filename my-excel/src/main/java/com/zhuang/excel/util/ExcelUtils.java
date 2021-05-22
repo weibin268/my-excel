@@ -4,8 +4,13 @@ import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.FillItem;
 import com.zhuang.excel.easypoi.EasyPoiUtils;
 import com.zhuang.excel.jxls.JxlsUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +19,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ExcelUtils {
+
+    public static void export4EasyExcel(String templateFilePath, String fileName, List<FillItem> fillItemList) {
+        export4EasyExcel(templateFilePath, fileName, fillItemList, getResponse());
+    }
 
     public static void export4EasyExcel(String templateFilePath, String fileName, List<FillItem> fillItemList, HttpServletResponse response) {
         InputStream inputStream = getInputStream(templateFilePath);
@@ -29,6 +39,10 @@ public class ExcelUtils {
         }
     }
 
+    public static <T> void export4EasyExcel(List<T> data, Class<T> head, String fileName) {
+        export4EasyExcel(data, head, fileName, getResponse());
+    }
+
     public static <T> void export4EasyExcel(List<T> data, Class<T> head, String fileName, HttpServletResponse response) {
         OutputStream outputStream = getOutputStream(fileName, response);
         EasyExcelUtils.export(outputStream, data, head);
@@ -37,6 +51,10 @@ public class ExcelUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data) {
+        export4EasyPoi(templateFilePath, fileName, data);
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
@@ -52,6 +70,10 @@ public class ExcelUtils {
         }
     }
 
+    public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data) {
+        export4Jxls(templateFilePath, fileName, data);
+    }
+
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
         InputStream inputStream = getInputStream(templateFilePath);
         OutputStream outputStream = getOutputStream(fileName, response);
@@ -64,12 +86,22 @@ public class ExcelUtils {
         }
     }
 
-    public static InputStream getInputStream(String templateFilePath) {
+    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer) {
+        import4EasyExcel(head, consumer, getRequest());
+    }
+
+    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer, HttpServletRequest request) {
+        InputStream inputStream = getInputStream(request);
+        List<T> dataList = EasyExcelUtils.readToList(inputStream, head);
+        consumer.accept(dataList);
+    }
+
+    private static InputStream getInputStream(String templateFilePath) {
         InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
         return inputStream;
     }
 
-    public static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
+    private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
             fileName = resolveFileNameEncoding(fileName);
             //fileName=URLEncoder.encode(fileName,"utf-8");//IE
@@ -81,6 +113,32 @@ public class ExcelUtils {
         }
     }
 
+    /**
+     * 获取当前会话的 request
+     *
+     * @return request
+     */
+    private static HttpServletRequest getRequest() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (servletRequestAttributes == null) {
+            throw new RuntimeException("非Web上下文无法获取Request");
+        }
+        return servletRequestAttributes.getRequest();
+    }
+
+    /**
+     * 获取当前会话的 response
+     *
+     * @return response
+     */
+    private static HttpServletResponse getResponse() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (servletRequestAttributes == null) {
+            throw new RuntimeException("非Web上下文无法获取Request");
+        }
+        return servletRequestAttributes.getResponse();
+    }
+
     private static String resolveFileNameEncoding(String fileName) {
         String result = null;
         try {
@@ -90,4 +148,23 @@ public class ExcelUtils {
         }
         return result;
     }
+
+    private static InputStream getInputStream(HttpServletRequest request) {
+        InputStream result = null;
+        if (!(request instanceof StandardMultipartHttpServletRequest)) {
+            throw new RuntimeException("request is not instance of StandardMultipartHttpServletRequest!");
+        }
+        StandardMultipartHttpServletRequest multipartRequest = (StandardMultipartHttpServletRequest) request;
+        for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
+            for (MultipartFile file : entry.getValue()) {
+                try {
+                    result = file.getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return result;
+    }
+
 }

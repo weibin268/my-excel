@@ -95,4 +95,10 @@ public class ExcelController {
         model.put("list", userList);
         ExcelUtils.export4Jxls("/excel/jxls-test-01.xlsx", "test.xlsx", model, response);
     }
+
+    @RequestMapping(value = "import4EasyExcel")
+    @ResponseBody
+    public void import4EasyExcel() {
+        ExcelUtils.import4EasyExcel(User4EasyExcel.class, dataList -> dataList.forEach(System.out::println));
+    }
 }
