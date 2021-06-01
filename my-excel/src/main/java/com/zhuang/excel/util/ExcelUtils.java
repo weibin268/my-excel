@@ -12,10 +12,9 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -94,6 +93,41 @@ public class ExcelUtils {
         InputStream inputStream = getInputStream(request);
         List<T> dataList = EasyExcelUtils.readToList(inputStream, head);
         consumer.accept(dataList);
+    }
+
+    public void downloadTemplate(String templateFilePath, String fileName) {
+        downloadTemplate(templateFilePath, fileName, getResponse());
+    }
+
+    public void downloadTemplate(String templateFilePath, String fileName, HttpServletResponse response) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码
+            fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
+            outputStream = response.getOutputStream();
+            String path = this.getClass().getResource(templateFilePath).getPath();
+            inputStream = new FileInputStream(new File(URLDecoder.decode(path, "utf-8")));
+            while (inputStream.available() > 0) {
+                outputStream.write(inputStream.read());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static InputStream getInputStream(String templateFilePath) {
