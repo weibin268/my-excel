@@ -8,7 +8,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
-import sun.awt.CharsetString;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ExcelUtils {
 
@@ -131,9 +127,7 @@ public class ExcelUtils {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            response.setContentType("application/vnd.ms-excel");
-            response.setCharacterEncoding(DEFAULT_CHARSET);
-            response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
+            response = toFileResponse(response, fileName);
             outputStream = response.getOutputStream();
             String path = ExcelUtils.class.getResource(templateFilePath).getPath();
             inputStream = new FileInputStream(new File(URLDecoder.decode(path, DEFAULT_CHARSET)));
@@ -179,7 +173,7 @@ public class ExcelUtils {
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
-            response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
+            response = toFileResponse(response, fileName);
             ServletOutputStream outputStream = response.getOutputStream();
             return outputStream;
         } catch (IOException e) {
@@ -213,6 +207,24 @@ public class ExcelUtils {
         return servletRequestAttributes.getResponse();
     }
 
+    private static HttpServletResponse toExcelFileResponse(HttpServletResponse response, String fileName) {
+        return toFileResponse(response, fileName, "application/vnd.ms-excel");
+    }
+
+    private static HttpServletResponse toFileResponse(HttpServletResponse response, String fileName) {
+        return toFileResponse(response, fileName, null);
+    }
+
+    private static HttpServletResponse toFileResponse(HttpServletResponse response, String fileName, String contentType) {
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        response.setContentType(contentType);
+        response.setCharacterEncoding(DEFAULT_CHARSET);
+        response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
+        return response;
+    }
+
     private static String encodeFileName(String fileName, String charset) {
         try {
             // 这里URLEncoder.encode可以防止中文乱码
@@ -224,4 +236,5 @@ public class ExcelUtils {
             throw new RuntimeException(e);
         }
     }
+
 }
