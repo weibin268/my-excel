@@ -53,7 +53,7 @@ public class ExcelUtils {
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data) {
-        export4EasyPoi(templateFilePath, fileName, data);
+        export4EasyPoi(templateFilePath, fileName, data, getResponse());
     }
 
     public static void export4EasyPoi(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
@@ -69,8 +69,22 @@ public class ExcelUtils {
         }
     }
 
+    public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName) {
+        export4EasyPoi(dataSet, head, fileName, getResponse());
+    }
+
+    public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName, HttpServletResponse response) {
+        OutputStream outputStream = getOutputStream(fileName, response);
+        EasyPoiUtils.export(outputStream, dataSet, head);
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data) {
-        export4Jxls(templateFilePath, fileName, data);
+        export4Jxls(templateFilePath, fileName, data, getResponse());
     }
 
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
@@ -85,14 +99,24 @@ public class ExcelUtils {
         }
     }
 
-    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer) {
-        import4EasyExcel(head, consumer, getRequest());
+    public static <T> List<T> import4EasyExcel(Class<T> head) {
+        return import4EasyExcel(head, getRequest());
     }
 
-    public static <T> void import4EasyExcel(Class<T> head, Consumer<List<T>> consumer, HttpServletRequest request) {
+    public static <T> List<T> import4EasyExcel(Class<T> head, HttpServletRequest request) {
         InputStream inputStream = getInputStream(request);
         List<T> dataList = EasyExcelUtils.readToList(inputStream, head);
-        consumer.accept(dataList);
+        return dataList;
+    }
+
+    public static <T> List<T> import4EasyPoi(Class<T> pojoClass) {
+        return import4EasyPoi(pojoClass, getRequest());
+    }
+
+    public static <T> List<T> import4EasyPoi(Class<T> pojoClass, HttpServletRequest request) {
+        InputStream inputStream = getInputStream(request);
+        List<T> dataList = EasyPoiUtils.readToList(inputStream, pojoClass);
+        return dataList;
     }
 
     public void downloadTemplate(String templateFilePath, String fileName) {
@@ -133,6 +157,22 @@ public class ExcelUtils {
     private static InputStream getInputStream(String templateFilePath) {
         InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
         return inputStream;
+    }
+
+    private static InputStream getInputStream(HttpServletRequest request) {
+        InputStream result = null;
+        StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
+        for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
+            for (MultipartFile file : entry.getValue()) {
+                try {
+                    result = file.getInputStream();
+                    break;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return result;
     }
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
@@ -179,21 +219,6 @@ public class ExcelUtils {
             result = new String(fileName.getBytes("utf-8"), "ISO8859-1");//chrome,firefox
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-    private static InputStream getInputStream(HttpServletRequest request) {
-        InputStream result = null;
-        StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
-        for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
-            for (MultipartFile file : entry.getValue()) {
-                try {
-                    result = file.getInputStream();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
         return result;
     }

@@ -1,6 +1,7 @@
 package com.zhuang.excel.controller;
 
 import com.zhuang.excel.demo.User4EasyExcel;
+import com.zhuang.excel.demo.User4EasyPoi;
 import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.FillItemBuilder;
 import com.zhuang.excel.model.User;
@@ -26,7 +27,7 @@ public class ExcelController {
     }
 
     @RequestMapping(value = "export4EasyExcel")
-    public void export4EasyExcel(HttpServletRequest request, HttpServletResponse response) {
+    public void export4EasyExcel() {
         List<User> userList = new ArrayList<>();
         User user = new User();
         user.setName("zwb");
@@ -41,11 +42,11 @@ public class ExcelController {
         ExcelUtils.export4EasyExcel("/excel/easyexcel-test-01.xlsx", "easyexcel-test-01.xlsx", new FillItemBuilder()
                 .add("userList", userList)
                 .set("total", userList.size())
-                .buildList(), response);
+                .buildList());
     }
 
     @RequestMapping(value = "export4EasyExcel2")
-    public void export4EasyExcel2(HttpServletRequest request, HttpServletResponse response) {
+    public void export4EasyExcel2() {
         List<User4EasyExcel> userList = new ArrayList<>();
         User4EasyExcel user = new User4EasyExcel();
         user.setName("zwb");
@@ -57,11 +58,11 @@ public class ExcelController {
         user.setAge(20);
         user.setDate(new Date());
         userList.add(user);
-        ExcelUtils.export4EasyExcel(userList, User4EasyExcel.class, "easyexcel-test-02.xlsx", response);
+        ExcelUtils.export4EasyExcel(userList, User4EasyExcel.class, "easyexcel-test-02.xlsx");
     }
 
     @RequestMapping(value = "export4EasyPoi")
-    public void export4EasyPoi(HttpServletRequest request, HttpServletResponse response) {
+    public void export4EasyPoi() {
         Map<String, Object> model = new HashMap<>();
         List<User> userList = new ArrayList<>();
         User user = new User();
@@ -75,11 +76,29 @@ public class ExcelController {
         user.setDate(new Date());
         userList.add(user);
         model.put("list", userList);
-        ExcelUtils.export4EasyPoi("/excel/easypoi-test-01.xlsx", "easypoi-test-01.xlsx", model, response);
+        ExcelUtils.export4EasyPoi("/excel/easypoi-test-01.xlsx", "easypoi-test-01.xlsx", model);
+    }
+
+    @RequestMapping(value = "export4EasyPoi2")
+    public void export4EasyPoi2() {
+        Map<String, Object> model = new HashMap<>();
+        List<User4EasyPoi> userList = new ArrayList<>();
+        User4EasyPoi user = new User4EasyPoi();
+        user.setName("zwb");
+        user.setAge(10);
+        user.setDate(new Date());
+        userList.add(user);
+        user = new User4EasyPoi();
+        user.setName("zzz");
+        user.setAge(20);
+        user.setDate(new Date());
+        userList.add(user);
+        model.put("list", userList);
+        ExcelUtils.export4EasyPoi(userList, User4EasyPoi.class, "easypoi-test-02.xlsx");
     }
 
     @RequestMapping(value = "export4Jxls")
-    public void export4Jxls(HttpServletRequest request, HttpServletResponse response) {
+    public void export4Jxls() {
         Map<String, Object> model = new HashMap<>();
         List<User> userList = new ArrayList<>();
         User user = new User();
@@ -93,12 +112,20 @@ public class ExcelController {
         user.setDate(new Date());
         userList.add(user);
         model.put("list", userList);
-        ExcelUtils.export4Jxls("/excel/jxls-test-01.xlsx", "test.xlsx", model, response);
+        ExcelUtils.export4Jxls("/excel/jxls-test-01.xlsx", "test.xlsx", model);
     }
 
     @RequestMapping(value = "import4EasyExcel")
     @ResponseBody
     public void import4EasyExcel() {
-        ExcelUtils.import4EasyExcel(User4EasyExcel.class, dataList -> dataList.forEach(System.out::println));
+        List<User4EasyExcel> dataList = ExcelUtils.import4EasyExcel(User4EasyExcel.class);
+        dataList.forEach(System.out::println);
+    }
+
+    @RequestMapping(value = "import4EasyPoi")
+    @ResponseBody
+    public void import4EasyPoi() {
+        List<User4EasyPoi> dataList = ExcelUtils.import4EasyPoi(User4EasyPoi.class);
+        dataList.forEach(System.out::println);
     }
 }
