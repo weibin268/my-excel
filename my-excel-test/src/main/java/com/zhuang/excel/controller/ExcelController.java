@@ -128,4 +128,9 @@ public class ExcelController {
         List<User4EasyPoi> dataList = ExcelUtils.import4EasyPoi(User4EasyPoi.class);
         dataList.forEach(System.out::println);
     }
+
+    @GetMapping("downloadTemplate")
+    public void downloadTemplate() {
+        ExcelUtils.downloadTemplate("/excel/导入模板.xlsx", "模 板.xlsx");
+    }
 }

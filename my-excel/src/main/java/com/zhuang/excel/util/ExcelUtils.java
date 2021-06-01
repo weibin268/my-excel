@@ -8,6 +8,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
+import sun.awt.CharsetString;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -119,22 +121,25 @@ public class ExcelUtils {
         return dataList;
     }
 
-    public void downloadTemplate(String templateFilePath, String fileName) {
+    public static void downloadTemplate(String templateFilePath, String fileName) {
         downloadTemplate(templateFilePath, fileName, getResponse());
     }
 
-    public void downloadTemplate(String templateFilePath, String fileName, HttpServletResponse response) {
+    public static void downloadTemplate(String templateFilePath, String fileName, HttpServletResponse response) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            response.setContentType("application/vnd.ms-excel");
-            response.setCharacterEncoding("utf-8");
+            String charset = "UTF-8";
             // 这里URLEncoder.encode可以防止中文乱码
-            fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
-            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
+            fileName = URLEncoder.encode(fileName, charset);
+            // “+”替换为“%20”，encode后的空格变为了“+”，需替换为html的空格转义符“%20”
+            fileName = fileName.replaceAll("\\+", "%20");
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding(charset);
+            response.setHeader("Content-disposition", "attachment;filename*=" + charset + "''" + fileName);
             outputStream = response.getOutputStream();
-            String path = this.getClass().getResource(templateFilePath).getPath();
-            inputStream = new FileInputStream(new File(URLDecoder.decode(path, "utf-8")));
+            String path = ExcelUtils.class.getResource(templateFilePath).getPath();
+            inputStream = new FileInputStream(new File(URLDecoder.decode(path, charset)));
             while (inputStream.available() > 0) {
                 outputStream.write(inputStream.read());
             }
