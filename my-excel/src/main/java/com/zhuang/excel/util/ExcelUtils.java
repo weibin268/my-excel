@@ -24,6 +24,8 @@ import java.util.function.Supplier;
 
 public class ExcelUtils {
 
+    private static final String DEFAULT_CHARSET = "UTF-8";
+
     public static void export4EasyExcel(String templateFilePath, String fileName, List<FillItem> fillItemList) {
         export4EasyExcel(templateFilePath, fileName, fillItemList, getResponse());
     }
@@ -129,17 +131,12 @@ public class ExcelUtils {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            String charset = "UTF-8";
-            // 这里URLEncoder.encode可以防止中文乱码
-            fileName = URLEncoder.encode(fileName, charset);
-            // “+”替换为“%20”，encode后的空格变为了“+”，需替换为html的空格转义符“%20”
-            fileName = fileName.replaceAll("\\+", "%20");
             response.setContentType("application/vnd.ms-excel");
-            response.setCharacterEncoding(charset);
-            response.setHeader("Content-disposition", "attachment;filename*=" + charset + "''" + fileName);
+            response.setCharacterEncoding(DEFAULT_CHARSET);
+            response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
             outputStream = response.getOutputStream();
             String path = ExcelUtils.class.getResource(templateFilePath).getPath();
-            inputStream = new FileInputStream(new File(URLDecoder.decode(path, charset)));
+            inputStream = new FileInputStream(new File(URLDecoder.decode(path, DEFAULT_CHARSET)));
             while (inputStream.available() > 0) {
                 outputStream.write(inputStream.read());
             }
@@ -182,9 +179,7 @@ public class ExcelUtils {
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
-            fileName = resolveFileNameEncoding(fileName);
-            //fileName=URLEncoder.encode(fileName,"utf-8");//IE
-            response.setHeader("content-disposition", "attachment;filename=" + fileName);
+            response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
             ServletOutputStream outputStream = response.getOutputStream();
             return outputStream;
         } catch (IOException e) {
@@ -218,14 +213,15 @@ public class ExcelUtils {
         return servletRequestAttributes.getResponse();
     }
 
-    private static String resolveFileNameEncoding(String fileName) {
-        String result = null;
+    private static String encodeFileName(String fileName, String charset) {
         try {
-            result = new String(fileName.getBytes("utf-8"), "ISO8859-1");//chrome,firefox
+            // 这里URLEncoder.encode可以防止中文乱码
+            fileName = URLEncoder.encode(fileName, charset);
+            // “+”替换为“%20”，encode后的空格变为了“+”，需替换为html的空格转义符“%20”
+            fileName = fileName.replaceAll("\\+", "%20");
+            return fileName;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        return result;
     }
-
 }
