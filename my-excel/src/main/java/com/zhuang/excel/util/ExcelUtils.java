@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,11 @@ public class ExcelUtils {
         InputStream inputStream = getInputStream(request);
         List<T> dataList = EasyPoiUtils.readToList(inputStream, pojoClass);
         return dataList;
+    }
+
+    public static void downloadTemplate(String templateFilePath) {
+        String fileName = Paths.get(templateFilePath).getFileName().toString();
+        downloadTemplate(templateFilePath, fileName, getResponse());
     }
 
     public static void downloadTemplate(String templateFilePath, String fileName) {
