@@ -10,7 +10,7 @@
 
     <groupId>com.github.weibin268</groupId>
     <artifactId>my-excel</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <name>my-excel</name>
     <description>excel导入导出</description>
