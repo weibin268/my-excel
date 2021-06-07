@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -119,34 +121,24 @@ public class ExcelUtils {
         return dataList;
     }
 
+    public static void downloadTemplate(String templateFilePath) {
+        String fileName = Paths.get(templateFilePath).getFileName().toString();
+        downloadTemplate(templateFilePath, fileName, getResponse());
+    }
+
     public static void downloadTemplate(String templateFilePath, String fileName) {
         downloadTemplate(templateFilePath, fileName, getResponse());
     }
 
     public static void downloadTemplate(String templateFilePath, String fileName, HttpServletResponse response) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
         try {
             response = toFileResponse(response, fileName);
-            outputStream = response.getOutputStream();
+            OutputStream outputStream = response.getOutputStream();
             String path = ExcelUtils.class.getResource(templateFilePath).getPath();
-            inputStream = new FileInputStream(new File(URLDecoder.decode(path, DEFAULT_CHARSET)));
-            while (inputStream.available() > 0) {
-                outputStream.write(inputStream.read());
-            }
-        } catch (Exception e) {
+            path = URLDecoder.decode(path, DEFAULT_CHARSET);
+            Files.copy(new File(path).toPath(), outputStream);
+        } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
