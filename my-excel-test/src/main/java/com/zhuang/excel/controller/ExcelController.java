@@ -9,6 +9,7 @@ import com.zhuang.excel.util.ExcelUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,7 +131,7 @@ public class ExcelController {
     }
 
     @GetMapping("downloadTemplate")
-    public void downloadTemplate() {
-        ExcelUtils.downloadTemplate("/excel/导入模板.xlsx", "模 板.xlsx");
+    public void downloadTemplate(@RequestParam("fileName") String fileName) {
+        ExcelUtils.downloadTemplate("/excel/" + fileName);
     }
 }
