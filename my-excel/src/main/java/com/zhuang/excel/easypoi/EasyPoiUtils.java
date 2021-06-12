@@ -28,10 +28,8 @@ public class EasyPoiUtils {
     }
 
     public static void export(String inputFilePath, String outputFilePath, Map<String, Object> model) {
-        try {
-            OutputStream outputStream = new FileOutputStream(outputFilePath);
+        try (OutputStream outputStream = new FileOutputStream(outputFilePath)) {
             export(inputFilePath, outputStream, model);
-            outputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -47,28 +45,22 @@ public class EasyPoiUtils {
     }
 
     public static <T> void export(String outputFilePath, Collection<T> dataSet, Class<T> pojoClass) {
-        OutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(outputFilePath);
+        try (OutputStream outputStream = new FileOutputStream(outputFilePath)) {
             export(outputStream, dataSet, pojoClass);
-            outputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T> List<T> readToList(String inputFilePath, Class pojoClass) {
-        try {
-            InputStream inputStream = new FileInputStream(inputFilePath);
-            List<T> result = readToList(inputStream, pojoClass);
-            inputStream.close();
-            return result;
+    public static <T> List<T> readToList(String inputFilePath, Class<?> pojoClass) {
+        try (InputStream inputStream = new FileInputStream(inputFilePath)) {
+            return readToList(inputStream, pojoClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T> List<T> readToList(InputStream inputStream, Class pojoClass) {
+    public static <T> List<T> readToList(InputStream inputStream, Class<?> pojoClass) {
         List<T> result;
         ImportParams importParams = new ImportParams();
         try {
