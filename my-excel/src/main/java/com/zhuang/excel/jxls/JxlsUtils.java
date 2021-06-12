@@ -40,12 +40,8 @@ public class JxlsUtils {
     }
 
     public static void export(String inputFilePath, String outputFilePath, Map<String, Object> model) {
-        try {
-            InputStream inputStream = new FileInputStream(inputFilePath);
-            OutputStream outputStream = new FileOutputStream(outputFilePath);
+        try (InputStream inputStream = new FileInputStream(inputFilePath); OutputStream outputStream = new FileOutputStream(outputFilePath)) {
             export(inputStream, outputStream, model);
-            outputStream.close();
-            inputStream.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
