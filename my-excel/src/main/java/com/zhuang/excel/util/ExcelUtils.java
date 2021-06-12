@@ -28,14 +28,10 @@ public class ExcelUtils {
     }
 
     public static void export4EasyExcel(String templateFilePath, String fileName, List<FillItem> fillItemList, HttpServletResponse response) {
-        InputStream inputStream = getInputStream(templateFilePath);
-        OutputStream outputStream = getOutputStream(fileName, response);
-        EasyExcelUtils.export(inputStream, outputStream, fillItemList);
-        try {
-            outputStream.close();
-            inputStream.close();
+        try (InputStream inputStream = getInputStream(templateFilePath); OutputStream outputStream = getOutputStream(fileName, response)) {
+            EasyExcelUtils.export(inputStream, outputStream, fillItemList);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -44,12 +40,10 @@ public class ExcelUtils {
     }
 
     public static <T> void export4EasyExcel(List<T> data, Class<T> head, String fileName, HttpServletResponse response) {
-        OutputStream outputStream = getOutputStream(fileName, response);
-        EasyExcelUtils.export(outputStream, data, head);
-        try {
-            outputStream.close();
+        try (OutputStream outputStream = getOutputStream(fileName, response)) {
+            EasyExcelUtils.export(outputStream, data, head);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -61,12 +55,10 @@ public class ExcelUtils {
         if (templateFilePath.startsWith("/")) {
             templateFilePath = templateFilePath.substring(1);
         }
-        OutputStream outputStream = getOutputStream(fileName, response);
-        EasyPoiUtils.export(templateFilePath, outputStream, data);
-        try {
-            outputStream.close();
+        try (OutputStream outputStream = getOutputStream(fileName, response)) {
+            EasyPoiUtils.export(templateFilePath, outputStream, data);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -75,12 +67,10 @@ public class ExcelUtils {
     }
 
     public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName, HttpServletResponse response) {
-        OutputStream outputStream = getOutputStream(fileName, response);
-        EasyPoiUtils.export(outputStream, dataSet, head);
-        try {
-            outputStream.close();
+        try (OutputStream outputStream = getOutputStream(fileName, response)) {
+            EasyPoiUtils.export(outputStream, dataSet, head);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,14 +79,10 @@ public class ExcelUtils {
     }
 
     public static void export4Jxls(String templateFilePath, String fileName, Map<String, Object> data, HttpServletResponse response) {
-        InputStream inputStream = getInputStream(templateFilePath);
-        OutputStream outputStream = getOutputStream(fileName, response);
-        JxlsUtils.export(inputStream, outputStream, data);
-        try {
-            outputStream.close();
-            inputStream.close();
+        try (InputStream inputStream = getInputStream(templateFilePath); OutputStream outputStream = getOutputStream(fileName, response)) {
+            JxlsUtils.export(inputStream, outputStream, data);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -129,7 +115,7 @@ public class ExcelUtils {
 
     public static void downloadTemplate(String templateFilePath, String fileName, HttpServletResponse response) {
         try {
-            response = toFileResponse(response, fileName);
+            toFileResponse(response, fileName);
             OutputStream outputStream = response.getOutputStream();
             String path = ExcelUtils.class.getResource(templateFilePath).getPath();
             path = URLDecoder.decode(path, DEFAULT_CHARSET);
@@ -161,7 +147,7 @@ public class ExcelUtils {
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
-            response = toFileResponse(response, fileName);
+            toFileResponse(response, fileName);
             return response.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -194,22 +180,21 @@ public class ExcelUtils {
         return servletRequestAttributes.getResponse();
     }
 
-    private static HttpServletResponse toExcelFileResponse(HttpServletResponse response, String fileName) {
-        return toFileResponse(response, fileName, "application/vnd.ms-excel");
+    private static void toExcelFileResponse(HttpServletResponse response, String fileName) {
+        toFileResponse(response, fileName, "application/vnd.ms-excel");
     }
 
-    private static HttpServletResponse toFileResponse(HttpServletResponse response, String fileName) {
-        return toFileResponse(response, fileName, null);
+    private static void toFileResponse(HttpServletResponse response, String fileName) {
+        toFileResponse(response, fileName, null);
     }
 
-    private static HttpServletResponse toFileResponse(HttpServletResponse response, String fileName, String contentType) {
+    private static void toFileResponse(HttpServletResponse response, String fileName, String contentType) {
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
         response.setContentType(contentType);
         response.setCharacterEncoding(DEFAULT_CHARSET);
         response.setHeader("Content-disposition", "attachment;filename*=" + DEFAULT_CHARSET + "''" + encodeFileName(fileName, DEFAULT_CHARSET));
-        return response;
     }
 
     private static String encodeFileName(String fileName, String charset) {
