@@ -9,7 +9,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -107,8 +106,7 @@ public class ExcelUtils {
 
     public static <T> List<T> import4EasyExcel(Class<T> head, HttpServletRequest request) {
         InputStream inputStream = getInputStream(request);
-        List<T> dataList = EasyExcelUtils.readToList(inputStream, head);
-        return dataList;
+        return EasyExcelUtils.readToList(inputStream, head);
     }
 
     public static <T> List<T> import4EasyPoi(Class<T> pojoClass) {
@@ -117,8 +115,7 @@ public class ExcelUtils {
 
     public static <T> List<T> import4EasyPoi(Class<T> pojoClass, HttpServletRequest request) {
         InputStream inputStream = getInputStream(request);
-        List<T> dataList = EasyPoiUtils.readToList(inputStream, pojoClass);
-        return dataList;
+        return EasyPoiUtils.readToList(inputStream, pojoClass);
     }
 
     public static void downloadTemplate(String templateFilePath) {
@@ -143,8 +140,7 @@ public class ExcelUtils {
     }
 
     private static InputStream getInputStream(String templateFilePath) {
-        InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
-        return inputStream;
+        return ExcelUtils.class.getResourceAsStream(templateFilePath);
     }
 
     private static InputStream getInputStream(HttpServletRequest request) {
@@ -166,8 +162,7 @@ public class ExcelUtils {
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
             response = toFileResponse(response, fileName);
-            ServletOutputStream outputStream = response.getOutputStream();
-            return outputStream;
+            return response.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
