@@ -7,6 +7,7 @@ public class User {
     private String name;
     private Integer age;
     private Date date;
+    private String sex;
 
     public String getName() {
         return name;
@@ -30,5 +31,13 @@ public class User {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
