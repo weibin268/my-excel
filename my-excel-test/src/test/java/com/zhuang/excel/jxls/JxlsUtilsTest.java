@@ -4,6 +4,8 @@ import com.zhuang.excel.model.User;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JxlsUtilsTest {
 
@@ -25,8 +27,11 @@ public class JxlsUtilsTest {
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-01.xlsx").getPath(), "D:\\temp\\jxls-test-01.xlsx", model);
     }
 
+    /**
+     * 合并单元格测试
+     */
     @Test
-    public void export2() {
+    public void export4MergeCells() {
         Map<String, Object> model = new HashMap<>();
         List<User> userList = new ArrayList<>();
         User user = new User();
@@ -57,6 +62,10 @@ public class JxlsUtilsTest {
         user.setSex("女");
         userList.add(user);
         model.put("list", userList);
+
+        LinkedHashMap<String, List<User>> groupBySex = userList.stream().collect(Collectors.groupingBy(User::getSex, LinkedHashMap::new, Collectors.toList()));
+        model.put("groupBySex", groupBySex);
+
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-02.xlsx").getPath(), "D:\\temp\\jxls-test-02.xlsx", model);
     }
 }
