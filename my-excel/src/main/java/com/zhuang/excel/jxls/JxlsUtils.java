@@ -6,7 +6,6 @@ import org.jxls.common.Context;
 import org.jxls.expression.JexlExpressionEvaluator;
 import org.jxls.transform.Transformer;
 import org.jxls.util.JxlsHelper;
-import org.jxls.util.TransformerFactory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -15,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JxlsUtils {
+
+    public static final String FUNCTION_MAP_KEY = "FUNCTION_MAP";
 
     public static void export(InputStream inputStream, OutputStream outputStream, Map<String, Object> model) {
         Context context = new Context();
@@ -28,8 +29,7 @@ public class JxlsUtils {
         jxlsHelper.setEvaluateFormulas(true);
         Transformer transformer = jxlsHelper.createTransformer(inputStream, outputStream);
         JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();
-        Map<String, Object> functionMap = new HashMap<>();
-        functionMap.put("utils", new JxlsUtils());
+        Map<String, Object> functionMap = getFunctionMap(model);
         JexlEngine jexlEngine = new JexlBuilder().namespaces(functionMap).create();
         evaluator.setJexlEngine(jexlEngine);
         try {
@@ -45,6 +45,23 @@ public class JxlsUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Map<String, Object> getFunctionMap(Map<String, Object> model) {
+        Map<String, Object> functionMap = new HashMap<>();
+        functionMap.put("utils", new JxlsUtils());
+        if (model != null) {
+            Object ojbFunctionMap = model.get(FUNCTION_MAP_KEY);
+            if (ojbFunctionMap != null) {
+                if (ojbFunctionMap instanceof Map) {
+                    Map<String, Object> tempFunctionMap = (Map<String, Object>) ojbFunctionMap;
+                    tempFunctionMap.forEach((c, value) -> {
+                        functionMap.put(c, value);
+                    });
+                }
+            }
+        }
+        return functionMap;
     }
 
     public String formatDate(Date date, String format) {
