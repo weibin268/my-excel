@@ -68,4 +68,32 @@ public class JxlsUtilsTest {
 
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-02.xlsx").getPath(), "D:\\temp\\jxls-test-02.xlsx", model);
     }
+
+
+    /**
+     * 表格动态列测试
+     */
+    @Test
+    public void export4DynamicGrid() {
+        Map<String, Object> model = new HashMap<>();
+        model.put("headers", Arrays.asList("姓名", "年龄", "性别"));
+
+        List<List<Object>> userList = new ArrayList<>();
+        List<Object> user = new ArrayList<>();
+        user.add("zwb");
+        user.add(18);
+        user.add("男");
+        userList.add(user);
+
+        user = new ArrayList<>();
+        user.add("lxc");
+        user.add(17);
+        user.add("女");
+        userList.add(user);
+
+        model.put("headers", Arrays.asList("姓名", "年龄", "性别"));
+        model.put("data", userList);
+
+        JxlsUtils.export(getClass().getResource("/excel/jxls-test-03.xlsx").getPath(), "D:\\temp\\jxls-test-03.xlsx", model);
+    }
 }
