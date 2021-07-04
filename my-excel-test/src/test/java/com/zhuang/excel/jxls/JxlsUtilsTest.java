@@ -69,7 +69,6 @@ public class JxlsUtilsTest {
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-02.xlsx").getPath(), "D:\\temp\\jxls-test-02.xlsx", model);
     }
 
-
     /**
      * 表格动态列测试
      */
@@ -96,4 +95,5 @@ public class JxlsUtilsTest {
 
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-03.xlsx").getPath(), "D:\\temp\\jxls-test-03.xlsx", model);
     }
+    
 }
