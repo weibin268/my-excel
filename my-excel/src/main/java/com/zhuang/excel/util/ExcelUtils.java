@@ -125,11 +125,7 @@ public class ExcelUtils {
         }
     }
 
-    private static InputStream getInputStream(String templateFilePath) {
-        return ExcelUtils.class.getResourceAsStream(templateFilePath);
-    }
-
-    private static InputStream getInputStream(HttpServletRequest request) {
+    public static InputStream getInputStream(HttpServletRequest request) {
         InputStream result = null;
         StandardMultipartHttpServletRequest multipartRequest = new StandardMultipartHttpServletRequest(request);
         for (Map.Entry<String, List<MultipartFile>> entry : multipartRequest.getMultiFileMap().entrySet()) {
@@ -145,13 +141,17 @@ public class ExcelUtils {
         return result;
     }
 
-    private static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
+    public static OutputStream getOutputStream(String fileName, HttpServletResponse response) {
         try {
             toFileResponse(response, fileName);
             return response.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static InputStream getInputStream(String templateFilePath) {
+        return ExcelUtils.class.getResourceAsStream(templateFilePath);
     }
 
     /**
