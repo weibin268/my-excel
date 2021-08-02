@@ -75,7 +75,6 @@ public class JxlsUtilsTest {
     @Test
     public void export4DynamicGrid() {
         Map<String, Object> model = new HashMap<>();
-        model.put("headers", Arrays.asList("姓名", "年龄", "性别"));
 
         List<List<Object>> userList = new ArrayList<>();
         List<Object> user = new ArrayList<>();
@@ -95,5 +94,5 @@ public class JxlsUtilsTest {
 
         JxlsUtils.export(getClass().getResource("/excel/jxls-test-03.xlsx").getPath(), "D:\\temp\\jxls-test-03.xlsx", model);
     }
-    
+
 }
