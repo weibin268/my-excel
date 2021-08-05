@@ -17,6 +17,8 @@ public class JxlsUtils {
 
     public static final String FUNCTION_MAP_KEY = "FUNCTION_MAP";
 
+    public static final String COMMON_UTILS_KEY = "utils";
+
     public static void export(InputStream inputStream, OutputStream outputStream, Map<String, Object> model) {
         Context context = new Context();
         if (model != null) {
@@ -49,7 +51,7 @@ public class JxlsUtils {
 
     private static Map<String, Object> getFunctionMap(Map<String, Object> model) {
         Map<String, Object> functionMap = new HashMap<>();
-        functionMap.put("utils", new JxlsUtils());
+        functionMap.put(COMMON_UTILS_KEY, new CommonUtils());
         if (model != null) {
             Object ojbFunctionMap = model.get(FUNCTION_MAP_KEY);
             if (ojbFunctionMap != null) {
@@ -62,19 +64,6 @@ public class JxlsUtils {
             }
         }
         return functionMap;
-    }
-
-    public String formatDate(Date date, String format) {
-        if (date == null) {
-            return "";
-        }
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-            return simpleDateFormat.format(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
 }
