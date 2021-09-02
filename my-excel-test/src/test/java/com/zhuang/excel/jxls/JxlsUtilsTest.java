@@ -28,7 +28,7 @@ public class JxlsUtilsTest {
     }
 
     /**
-     * 合并单元格测试
+     * 合并单元格测试（注：模板中要合并的单元格不能本身就是一格合并单元格，可以模板本身的单元格不要合并，而是通过提高jxls合并单元格的数量的方式实现）
      */
     @Test
     public void export4MergeCells() {
