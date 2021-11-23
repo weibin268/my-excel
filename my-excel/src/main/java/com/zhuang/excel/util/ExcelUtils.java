@@ -113,6 +113,7 @@ public class ExcelUtils {
             SpringWebUtils.toFileResponse(response, fileName);
             OutputStream outputStream = response.getOutputStream();
             InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
+            // 没设置ContentLength，打开excel会提示需要修复文件
             response.setContentLength(inputStream.available());
             copy(inputStream, outputStream);
             inputStream.close();
