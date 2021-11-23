@@ -5,6 +5,8 @@ import com.zhuang.excel.easyexcel.FillItem;
 import com.zhuang.excel.easypoi.EasyPoiUtils;
 import com.zhuang.excel.jxls.JxlsUtils;
 import com.zhuang.excel.spring.SpringWebUtils;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.util.RecordFormatException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,12 +116,26 @@ public class ExcelUtils {
         try {
             SpringWebUtils.toFileResponse(response, fileName);
             OutputStream outputStream = response.getOutputStream();
-            String path = ExcelUtils.class.getResource(templateFilePath).getPath();
-            path = URLDecoder.decode(path, SpringWebUtils.DEFAULT_CHARSET);
-            Files.copy(new File(path).toPath(), outputStream);
+            InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
+            response.setContentLength(inputStream.available());
+            copy(inputStream, outputStream);
+            inputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private static void copy(InputStream inp, OutputStream out) throws IOException {
+        byte[] buff = new byte[4096];
+        int count;
+        while ((count = inp.read(buff)) != -1) {
+            if (count < -1) {
+                throw new RecordFormatException("Can't have read < -1 bytes");
+            }
+
+            if (count > 0) {
+                out.write(buff, 0, count);
+            }
+        }
+    }
 }
