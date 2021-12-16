@@ -38,6 +38,8 @@ public class JxlsUtils {
             jxlsHelper.processTemplate(context, transformer);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }finally {
+            transformer.dispose();
         }
     }
 
