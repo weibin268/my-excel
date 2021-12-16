@@ -6,6 +6,7 @@
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.github.weibin268</groupId>

@@ -59,9 +59,7 @@ public class JxlsUtils {
             if (ojbFunctionMap != null) {
                 if (ojbFunctionMap instanceof Map) {
                     Map<String, Object> tempFunctionMap = (Map<String, Object>) ojbFunctionMap;
-                    tempFunctionMap.forEach((c, value) -> {
-                        functionMap.put(c, value);
-                    });
+                    functionMap.putAll(tempFunctionMap);
                 }
             }
         }
