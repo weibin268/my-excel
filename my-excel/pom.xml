@@ -11,7 +11,7 @@
 
     <groupId>com.github.weibin268</groupId>
     <artifactId>my-excel</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>my-excel</name>
     <description>excel导入导出</description>
@@ -105,6 +105,13 @@
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <version>9.0.29</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.4.5</version>
             <scope>provided</scope>
         </dependency>
         <!--begin jxls-->

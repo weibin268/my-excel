@@ -3,7 +3,9 @@ package com.zhuang.excel.util;
 import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.FillItem;
 import com.zhuang.excel.easypoi.EasyPoiUtils;
+import com.zhuang.excel.hutool.HutoolExcelUtils;
 import com.zhuang.excel.jxls.JxlsUtils;
+import com.zhuang.excel.model.ExportOption;
 import com.zhuang.excel.spring.SpringWebUtils;
 import org.apache.poi.util.RecordFormatException;
 
@@ -64,6 +66,18 @@ public class ExcelUtils {
     public static <T> void export4EasyPoi(List<T> dataSet, Class<T> head, String fileName, HttpServletResponse response) {
         try (OutputStream outputStream = SpringWebUtils.getFileOutputStream(fileName, response)) {
             EasyPoiUtils.export(outputStream, dataSet, head);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> void export4Hutool(List<T> dataSet, ExportOption exportOption, String fileName) {
+        export4Hutool(dataSet, exportOption, fileName, SpringWebUtils.getResponse());
+    }
+
+    public static <T> void export4Hutool(List<T> dataSet, ExportOption exportOption, String fileName, HttpServletResponse response) {
+        try (OutputStream outputStream = SpringWebUtils.getFileOutputStream(fileName, response)) {
+            HutoolExcelUtils.export(outputStream, dataSet, exportOption);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
