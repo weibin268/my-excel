@@ -35,6 +35,8 @@ public class HutoolExcelUtils {
         ExcelWriter writer = ExcelUtil.getWriter();
         final Font headFont = writer.getWorkbook().createFont();
         headFont.setBold(true);
+        headFont.setFontName("宋体");
+        headFont.setFontHeightInPoints((short) 14);
         writer.getHeadCellStyle().setFont(headFont);
         for (int i = 0; i < exportOption.getColumnList().size(); i++) {
             ExportOption.Column column = exportOption.getColumnList().get(i);
