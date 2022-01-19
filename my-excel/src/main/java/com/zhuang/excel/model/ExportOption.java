@@ -10,7 +10,7 @@ public class ExportOption {
 
     private List<Column> columnList = new ArrayList<>();
 
-    private Integer defaultColumnWidth = 20;
+    private Integer defaultColumnWidth;
 
     public ExportOption addColumn(String fieldName, String headName, Integer width) {
         Column column = new Column();

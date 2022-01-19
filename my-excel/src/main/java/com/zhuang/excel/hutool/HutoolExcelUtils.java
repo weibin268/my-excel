@@ -41,7 +41,9 @@ public class HutoolExcelUtils {
         for (int i = 0; i < exportOption.getColumnList().size(); i++) {
             ExportOption.Column column = exportOption.getColumnList().get(i);
             writer.addHeaderAlias(column.getFieldName(), column.getHeadName());
-            writer.setColumnWidth(i, column.getWidth());
+            if (column.getWidth() != null) {
+                writer.setColumnWidth(i, column.getWidth());
+            }
         }
         writer.write(dataMap).flush(outputStream);
     }
