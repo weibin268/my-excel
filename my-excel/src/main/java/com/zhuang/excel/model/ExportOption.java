@@ -12,6 +12,11 @@ public class ExportOption {
 
     private Integer defaultColumnWidth;
 
+    public ExportOption setDefaultColumnWidth(Integer width) {
+        defaultColumnWidth = width;
+        return this;
+    }
+
     public ExportOption addColumn(String fieldName, String headName, Integer width) {
         Column column = new Column();
         column.setFieldName(fieldName);
@@ -22,7 +27,7 @@ public class ExportOption {
     }
 
     public ExportOption addColumn(String fieldName, String headName) {
-        return addColumn(fieldName, headName, defaultColumnWidth);
+        return addColumn(fieldName, headName, null);
     }
 
     @Data

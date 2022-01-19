@@ -43,6 +43,10 @@ public class HutoolExcelUtils {
             writer.addHeaderAlias(column.getFieldName(), column.getHeadName());
             if (column.getWidth() != null) {
                 writer.setColumnWidth(i, column.getWidth());
+            } else {
+                if (exportOption.getDefaultColumnWidth() != null) {
+                    writer.setColumnWidth(i, exportOption.getDefaultColumnWidth());
+                }
             }
         }
         writer.write(dataMap).flush(outputStream);
