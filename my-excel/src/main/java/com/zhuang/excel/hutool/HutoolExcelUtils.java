@@ -32,7 +32,7 @@ public class HutoolExcelUtils {
     }
 
     public static <T> void export(OutputStream outputStream, List<Map<String, Object>> dataMap, ExportOption exportOption) {
-        ExcelWriter writer = ExcelUtil.getWriter();
+        ExcelWriter writer = ExcelUtil.getBigWriter();
         final Font headFont = writer.getWorkbook().createFont();
         headFont.setBold(true);
         headFont.setFontName("宋体");
