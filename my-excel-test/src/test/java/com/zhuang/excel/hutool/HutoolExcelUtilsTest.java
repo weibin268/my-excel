@@ -1,7 +1,5 @@
 package com.zhuang.excel.hutool;
 
-import com.zhuang.excel.demo.User4EasyExcel;
-import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.EasyExcelUtilsTest;
 import com.zhuang.excel.model.ExportOption;
 import org.junit.Test;
@@ -10,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class HutoolExcelUtilsTest {
 
