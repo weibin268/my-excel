@@ -1,12 +1,17 @@
 package com.zhuang.excel.hutool;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.zhuang.excel.model.ExportOption;
 import org.apache.poi.ss.usermodel.Font;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -66,5 +71,24 @@ public class HutoolExcelUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> List<T> readToList(String inputFilePath, Class<T> pojoClass) {
+        try (InputStream inputStream = new FileInputStream(inputFilePath)) {
+            return readToList(inputStream, pojoClass);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> List<T> readToList(InputStream inputStream, Class<T> pojoClass) {
+        List<T> result;
+        try {
+            ExcelReader reader = ExcelUtil.getReader(inputStream);
+            result = reader.readAll(pojoClass);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

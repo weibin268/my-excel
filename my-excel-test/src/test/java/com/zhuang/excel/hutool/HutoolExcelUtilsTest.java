@@ -1,5 +1,7 @@
 package com.zhuang.excel.hutool;
 
+import com.zhuang.excel.demo.User4EasyExcel;
+import com.zhuang.excel.easyexcel.EasyExcelUtils;
 import com.zhuang.excel.easyexcel.EasyExcelUtilsTest;
 import com.zhuang.excel.model.ExportOption;
 import org.junit.Test;
@@ -7,6 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -29,4 +32,11 @@ public class HutoolExcelUtilsTest {
         exportOption.addColumn("name", "姓名").addColumn("age", "年龄", 50);
         HutoolExcelUtils.export("/Users/zhuang/Documents/temp/test.xlsx", userList, exportOption);
     }
+
+    @Test
+    public void readToList() {
+        List<Map> userList = HutoolExcelUtils.readToList(getClass().getResource("/excel/data-test-01.xlsx").getPath(), Map.class);
+        userList.forEach(System.out::println);
+    }
+
 }
