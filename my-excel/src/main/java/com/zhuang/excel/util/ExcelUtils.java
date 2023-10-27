@@ -127,22 +127,28 @@ public class ExcelUtils {
             SpringWebUtils.toFileResponse(response, fileName);
             OutputStream outputStream = response.getOutputStream();
             InputStream inputStream = ExcelUtils.class.getResourceAsStream(templateFilePath);
+
+            int copyCount = copy(inputStream, outputStream);
             // 没设置ContentLength，打开excel会提示需要修复文件
-            response.setContentLength(inputStream.available());
-            copy(inputStream, outputStream);
+            // 注：这里不用“通过inputStream.available()”，因为如果是“DataInputStream”，通过inputStream.available()获取的是0
+            response.setContentLength(copyCount);
             inputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void copy(InputStream inp, OutputStream out) throws IOException {
+    private static int copy(InputStream inp, OutputStream out) throws IOException {
+        int totalCount = 0;
         byte[] buff = new byte[4096];
         int count;
+
         while ((count = inp.read(buff)) != -1) {
             if (count > 0) {
                 out.write(buff, 0, count);
+                totalCount = totalCount + count;
             }
         }
+        return totalCount;
     }
 }
